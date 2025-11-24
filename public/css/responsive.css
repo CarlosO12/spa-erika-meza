@@ -1,0 +1,458 @@
+/**
+ * Estilos Responsivos
+ * SPA Erika Meza
+ */
+
+/* Extra Small Devices (Portrait Phones, menos de 576px) */
+@media (max-width: 575.98px) {
+    /* Navegación */
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .nav-link {
+        padding: 8px 12px;
+        font-size: 0.9rem;
+    }
+    
+    /* Hero Section */
+    .hero-section h1 {
+        font-size: 1.8rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1rem;
+    }
+    
+    .hero-section .btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    /* Cards */
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .card-title {
+        font-size: 1.1rem;
+    }
+    
+    /* Stats Cards */
+    .stats-card {
+        margin-bottom: 15px;
+    }
+    
+    .stats-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2rem;
+    }
+    
+    .stats-card h3 {
+        font-size: 1.5rem;
+    }
+    
+    /* Tablas */
+    .table {
+        font-size: 0.85rem;
+    }
+    
+    .table thead {
+        display: none;
+    }
+    
+    .table tbody tr {
+        display: block;
+        margin-bottom: 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 8px;
+        padding: 10px;
+    }
+    
+    .table tbody td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border: none;
+    }
+    
+    .table tbody td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        margin-right: 10px;
+    }
+    
+    /* Formularios */
+    .form-label {
+        font-size: 0.9rem;
+    }
+    
+    .form-control,
+    .form-select {
+        font-size: 0.9rem;
+    }
+    
+    /* Modales */
+    .modal-dialog {
+        margin: 10px;
+    }
+    
+    .modal-body {
+        padding: 15px;
+    }
+    
+    /* Footer */
+    .footer {
+        text-align: center;
+    }
+    
+    .footer .col-md-4 {
+        margin-bottom: 20px;
+    }
+    
+    /* Servicios */
+    .service-card {
+        margin-bottom: 20px;
+    }
+    
+    /* Calendario */
+    .calendar-day {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+    
+    /* Booking Steps */
+    .booking-step h5 {
+        font-size: 1.1rem;
+    }
+    
+    .service-option label {
+        padding: 10px;
+    }
+    
+    .time-slot {
+        padding: 8px 12px;
+        font-size: 0.85rem;
+    }
+}
+
+/* Small Devices (Landscape Phones, 576px - 767px) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .hero-section h1 {
+        font-size: 2.2rem;
+    }
+    
+    .stats-card {
+        margin-bottom: 15px;
+    }
+    
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    .btn {
+        padding: 10px 25px;
+    }
+    
+    /* Grid ajustado */
+    .col-sm-6 {
+        margin-bottom: 15px;
+    }
+}
+
+/* Medium Devices (Tablets, 768px - 991px) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    /* Navegación */
+    .navbar-nav {
+        padding: 15px 0;
+    }
+    
+    .nav-link {
+        padding: 10px 15px;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        padding: 40px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    /* Cards en 2 columnas */
+    .col-md-4 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    /* Sidebar Admin */
+    .admin-sidebar {
+        width: 200px;
+    }
+    
+    .admin-content {
+        margin-left: 200px;
+    }
+    
+    /* Tabla responsive */
+    .table-responsive {
+        overflow-x: auto;
+    }
+}
+
+/* Large Devices (Desktops, 992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+    .container {
+        max-width: 960px;
+    }
+    
+    .hero-section h1 {
+        font-size: 3rem;
+    }
+    
+    .stats-icon {
+        width: 55px;
+        height: 55px;
+    }
+}
+
+/* Extra Large Devices (Large Desktops, 1200px y más) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1140px;
+    }
+    
+    .hero-section {
+        padding: 80px 0;
+    }
+    
+    .stats-card h3 {
+        font-size: 2.5rem;
+    }
+}
+
+/* Orientación Landscape en móviles */
+@media (max-height: 500px) and (orientation: landscape) {
+    .hero-section {
+        padding: 30px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+    
+    .hero-section .lead {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
+    }
+    
+    .modal-dialog {
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .admin-sidebar {
+        position: relative;
+        height: auto;
+        width: 100%;
+    }
+}
+
+/* Impresión */
+@media print {
+    .navbar,
+    .footer,
+    .btn,
+    .admin-sidebar {
+        display: none;
+    }
+    
+    .admin-content {
+        margin-left: 0;
+        padding: 0;
+    }
+    
+    .card {
+        border: 1px solid #dee2e6;
+        box-shadow: none;
+    }
+    
+    .table {
+        font-size: 0.85rem;
+    }
+    
+    a[href]:after {
+        content: " (" attr(href) ")";
+    }
+}
+
+/* Ajustes para pantallas táctiles */
+@media (hover: none) and (pointer: coarse) {
+    .btn,
+    .nav-link,
+    .card {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .form-control,
+    .form-select {
+        min-height: 44px;
+        font-size: 16px; /* Evita zoom en iOS */
+    }
+    
+    .calendar-day {
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .time-slot {
+        min-height: 44px;
+        padding: 12px 20px;
+    }
+}
+
+/* Modo Oscuro (preferencia del sistema) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: #1a202c;
+        --text-color: #e2e8f0;
+        --card-bg: #2d3748;
+    }
+    
+    body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+    
+    .card {
+        background-color: var(--card-bg);
+        color: var(--text-color);
+    }
+    
+    .table {
+        color: var(--text-color);
+    }
+    
+    .form-control,
+    .form-select {
+        background-color: var(--card-bg);
+        color: var(--text-color);
+        border-color: #4a5568;
+    }
+}
+
+/* Reducción de movimiento (accesibilidad) */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Contraste Alto (accesibilidad) */
+@media (prefers-contrast: high) {
+    .btn {
+        border: 2px solid currentColor;
+    }
+    
+    .card {
+        border: 2px solid #000;
+    }
+    
+    .form-control,
+    .form-select {
+        border: 2px solid #000;
+    }
+}
+
+/* Utilidades Responsivas Personalizadas */
+.mobile-only {
+    display: block;
+}
+
+.desktop-only {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .mobile-only {
+        display: none;
+    }
+    
+    .desktop-only {
+        display: block;
+    }
+}
+
+/* Espaciado responsivo */
+.py-mobile-3 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .py-mobile-3 {
+        padding-top: 3rem;
+        padding-bottom: 3rem;
+    }
+}
+
+/* Texto responsivo */
+.text-mobile-center {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .text-mobile-center {
+        text-align: left;
+    }
+}
+
+/* Contenedor fluido en móvil */
+@media (max-width: 767.98px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
+
+/* Ajustes para iPad y tablets */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .col-tablet-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    .service-card img {
+        height: 200px;
+    }
+    
+    .stats-card {
+        margin-bottom: 20px;
+    }
+}
+
+/* Ajustes para pantallas muy grandes */
+@media (min-width: 1920px) {
+    .container {
+        max-width: 1400px;
+    }
+    
+    .hero-section h1 {
+        font-size: 4rem;
+    }
+    
+    .hero-section .lead {
+        font-size: 1.5rem;
+    }
+}
