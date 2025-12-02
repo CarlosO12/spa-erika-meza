@@ -155,34 +155,15 @@ CREATE TABLE disponibilidad_especialistas (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: contacto_mensajes
--- Descripción: Mensajes enviados desde el formulario publico
--- ============================================
-CREATE TABLE contacto_mensajes (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    telefono VARCHAR(20) DEFAULT NULL,
-    asunto ENUM('informacion', 'cita', 'servicio', 'queja', 'otro') NOT NULL,
-    mensaje TEXT NOT NULL,
-    fecha_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
-    estado ENUM('nuevo', 'leido', 'respondido') DEFAULT 'nuevo'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- ============================================
 -- TABLA: configuracion_sistema
 -- Descripción: Configuraciones del sistema
 -- ============================================
 CREATE TABLE configuracion_sistema (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    clave VARCHAR(100) UNIQUE NOT NULL,
-    valor TEXT NOT NULL,
-    tipo ENUM('text', 'email', 'phone', 'number', 'textarea', 'boolean') DEFAULT 'text',
-    categoria VARCHAR(50) DEFAULT 'general',
+    llave_ajuste VARCHAR(100) NOT NULL UNIQUE,
+    valor_ajuste TEXT,
     descripcion VARCHAR(255),
-    actualizado TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    INDEX idx_clave (clave),
-    INDEX idx_categoria (categoria)
+    actualizado TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
