@@ -2,7 +2,7 @@ CREATE DATABASE IF NOT EXISTS spa_erika_meza CHARACTER SET utf8mb4 COLLATE utf8m
 USE spa_erika_meza;
 
 -- ============================================
--- TABLA: users
+-- TABLA: usuarios
 -- Descripción: Almacena todos los usuarios del sistema
 -- ============================================
 CREATE TABLE usuarios (
@@ -25,7 +25,7 @@ CREATE TABLE usuarios (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: specialists
+-- TABLA: especialistas
 -- Descripción: Información adicional de especialistas
 -- ============================================
 CREATE TABLE especialistas (
@@ -46,7 +46,7 @@ CREATE TABLE especialistas (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: services
+-- TABLA: servicios
 -- Descripción: Catálogo de servicios del SPA
 -- ============================================
 CREATE TABLE servicios (
@@ -65,7 +65,7 @@ CREATE TABLE servicios (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: appointments
+-- TABLA: citas
 -- Descripción: Citas agendadas
 -- ============================================
 CREATE TABLE citas (
@@ -90,7 +90,7 @@ CREATE TABLE citas (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: cart
+-- TABLA: carrito
 -- Descripción: Carrito de compras temporal
 -- ============================================
 CREATE TABLE carrito (
@@ -105,7 +105,7 @@ CREATE TABLE carrito (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: service_history
+-- TABLA: historial_servicios
 -- Descripción: Historial de servicios completados con reseñas
 -- ============================================
 CREATE TABLE historial_servicios (
@@ -119,7 +119,7 @@ CREATE TABLE historial_servicios (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: notifications
+-- TABLA: notificaciones
 -- Descripción: Notificaciones del sistema
 -- ============================================
 CREATE TABLE notificaciones (
@@ -137,7 +137,7 @@ CREATE TABLE notificaciones (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: specialist_availability
+-- TABLA: disponibilidad_especialistas
 -- Descripción: Horarios disponibles de especialistas
 -- ============================================
 CREATE TABLE disponibilidad_especialistas (
@@ -155,7 +155,22 @@ CREATE TABLE disponibilidad_especialistas (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ============================================
--- TABLA: system_settings
+-- TABLA: contacto_mensajes
+-- Descripción: Mensajes enviados desde el formulario publico
+-- ============================================
+CREATE TABLE contacto_mensajes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20) DEFAULT NULL,
+    asunto ENUM('informacion', 'cita', 'servicio', 'queja', 'otro') NOT NULL,
+    mensaje TEXT NOT NULL,
+    fecha_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    estado ENUM('nuevo', 'leido', 'respondido') DEFAULT 'nuevo'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ============================================
+-- TABLA: configuracion_sistema
 -- Descripción: Configuraciones del sistema
 -- ============================================
 CREATE TABLE configuracion_sistema (
