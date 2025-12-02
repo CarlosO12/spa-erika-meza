@@ -1,7 +1,6 @@
 <?php
 requireRole(ROLE_CLIENT);
 
-
 require_once CONFIG_PATH . '/database.php';
 require_once APP_PATH . '/models/Service.php';
 require_once APP_PATH . '/models/Specialist.php';
@@ -51,6 +50,8 @@ $preselectedSpecialist = isset($_GET['specialist']) ? (int)$_GET['specialist'] :
                                             value="<?php echo $service['id']; ?>" 
                                             id="service_<?php echo $service['id']; ?>"
                                             data-duration="<?php echo $service['duracion']; ?>"
+                                            data-name="<?php echo e($service['nombre']); ?>"
+                                            data-price="<?php echo formatPrice($service['precio']); ?>"
                                             <?php echo ($preselectedService === $service['id']) ? 'checked' : ''; ?>
                                             required>
                                         <label for="service_<?php echo $service['id']; ?>">
@@ -169,7 +170,7 @@ $preselectedSpecialist = isset($_GET['specialist']) ? (int)$_GET['specialist'] :
                                 <button type="button" class="btn btn-secondary" onclick="prevStep(2)">
                                     <i class="bi bi-arrow-left"></i> Anterior
                                 </button>
-                                <button type="submit" class="btn btn-success">
+                                <button type="submit" class="btn btn-success" id="submitBtn">
                                     <i class="bi bi-check-circle"></i> Confirmar Cita
                                 </button>
                             </div>
@@ -221,29 +222,42 @@ let selectedTime = null;
 
 // Navegación entre pasos
 function nextStep(step) {
-    try {
-        if (step === 2 && !validateStep1()) {
+    if (step === 2) {
+        const selectedServiceCheck = document.querySelector('input[name="servicio_id"]:checked');
+        if (!selectedServiceCheck) {
             alert('Por favor selecciona un servicio');
-            return;
+            return false;
         }
-        
-        if (step === 3 && !validateStep2()) {
-            alert('Por favor completa todos los campos');
-            return;
-        }
-        
-        document.getElementById('step' + currentStep).classList.remove('active');
-        document.getElementById('step' + step).classList.add('active');
-        currentStep = step;
-        
-        if (step === 3) {
-            showBookingSummary();
-        }
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (error) {
-        console.error('Error:', error);
     }
+    
+    if (step === 3) {
+        const especialistaId = document.getElementById('especialista_id').value;
+        const fechaCita = document.getElementById('fecha_cita').value;
+        const horaCita = document.getElementById('hora_cita').value;
+        
+        if (!especialistaId) {
+            alert('Por favor selecciona un especialista');
+            return false;
+        }
+        if (!fechaCita) {
+            alert('Por favor selecciona una fecha');
+            return false;
+        }
+        if (!horaCita) {
+            alert('Por favor selecciona un horario');
+            return false;
+        }
+    }
+    
+    document.getElementById('step' + currentStep).classList.remove('active');
+    document.getElementById('step' + step).classList.add('active');
+    currentStep = step;
+    
+    if (step === 3) {
+        showBookingSummary();
+    }
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function prevStep(step) {
@@ -260,11 +274,20 @@ function validateStep1() {
 }
 
 function validateStep2() {
-    selectedSpecialist = document.getElementById('especialista_id').value;
-    selectedDate = document.getElementById('fecha_cita').value;
-    selectedTime = document.getElementById('hora_cita').value;
+    const especialistaId = document.getElementById('especialista_id').value;
+    const fechaCita = document.getElementById('fecha_cita').value;
+    const horaCita = document.getElementById('hora_cita').value;
     
-    return selectedSpecialist && selectedDate && selectedTime;
+    selectedSpecialist = especialistaId;
+    selectedDate = fechaCita;
+    selectedTime = horaCita;
+    
+    if (!especialistaId || !fechaCita || !horaCita) {
+        console.log('Validación fallida:', { especialistaId, fechaCita, horaCita });
+        return false;
+    }
+    
+    return true;
 }
 
 // Cargar horarios disponibles
@@ -276,11 +299,11 @@ async function loadAvailableSlots() {
     const slotsContainer = document.getElementById('availableSlots');
     
     if (!especialistaId || !fechaCita || !servicioId) {
-        slotsContainer.innerHTML = '<div class="alert-off alert-info">Selecciona un especialista y fecha para ver los horarios disponibles</div>';
+        slotsContainer.innerHTML = '<div class="alert alert-info mb-0"><i class="bi bi-info-circle"></i> Selecciona un especialista y fecha para ver los horarios disponibles</div>';
+        document.getElementById('hora_cita').value = '';
         return;
     }
     
-    // Mostrar loading
     slotsContainer.innerHTML = '<div class="text-center py-3"><div class="spinner-border text-primary" role="status"></div><p class="mt-2">Cargando horarios...</p></div>';
     
     try {
@@ -288,12 +311,12 @@ async function loadAvailableSlots() {
         const data = await response.json();
         
         if (!data.success) {
-            slotsContainer.innerHTML = `<div class="alert-off alert-danger">${data.error}</div>`;
+            slotsContainer.innerHTML = `<div class="alert alert-danger mb-0"><i class="bi bi-exclamation-circle"></i> ${data.error}</div>`;
             return;
         }
         
         if (data.slots.length === 0) {
-            slotsContainer.innerHTML = '<div class="alert-off alert-warning"><i class="bi bi-exclamation-triangle"></i> No hay horarios disponibles para esta fecha. Por favor selecciona otra fecha.</div>';
+            slotsContainer.innerHTML = '<div class="alert alert-warning mb-0"><i class="bi bi-exclamation-triangle"></i> No hay horarios disponibles para esta fecha. Por favor selecciona otra fecha.</div>';
             return;
         }
         
@@ -315,7 +338,7 @@ async function loadAvailableSlots() {
         
     } catch (error) {
         console.error('Error:', error);
-        slotsContainer.innerHTML = '<div class="alert-off alert-danger">Error al cargar los horarios. Por favor intenta nuevamente.</div>';
+        slotsContainer.innerHTML = '<div class="alert alert-danger mb-0"><i class="bi bi-exclamation-circle"></i> Error al cargar los horarios. Por favor intenta nuevamente.</div>';
     }
 }
 
@@ -332,30 +355,29 @@ function selectTimeSlot(time, button) {
     const timeValue = time.includes(':') && time.split(':').length === 2 ? time + ':00' : time;
     
     document.getElementById('hora_cita').value = timeValue;
-    selectedTime = time;
+    selectedTime = timeValue;
     
-    console.log('Time selected:', timeValue);
+    console.log('Hora seleccionada:', timeValue);
 }
 
 // Mostrar resumen
 function showBookingSummary() {
     const servicioRadio = document.querySelector('input[name="servicio_id"]:checked');
-    const servicioLabel = servicioRadio ? document.querySelector(`label[for="${servicioRadio.id}"]`) : null;
     const especialistaSelect = document.getElementById('especialista_id');
     const fechaCita = document.getElementById('fecha_cita').value;
     const horaCita = document.getElementById('hora_cita').value;
     
-    if (!servicioLabel || !especialistaSelect.value || !fechaCita || !horaCita) {
+    if (!servicioRadio || !especialistaSelect.value || !fechaCita || !horaCita) {
         document.getElementById('bookingSummary').innerHTML = '<div class="alert alert-warning">Datos incompletos</div>';
         return;
     }
     
-    const servicioNombre = servicioLabel.querySelector('h6').textContent;
-    const servicioPrecio = servicioLabel.querySelector('.text-primary').textContent;
-    const servicioDuracion = servicioLabel.querySelector('.text-muted:last-child').textContent;
+    // Obtener datos del servicio desde los data attributes
+    const servicioNombre = servicioRadio.dataset.name;
+    const servicioPrecio = servicioRadio.dataset.price;
+    const servicioDuracion = servicioRadio.dataset.duration;
     const especialistaNombre = especialistaSelect.options[especialistaSelect.selectedIndex].text;
     
-    // Formatear fecha
     const fechaObj = new Date(fechaCita + 'T00:00:00');
     const fechaFormateada = fechaObj.toLocaleDateString('es-CO', { 
         weekday: 'long', 
@@ -364,11 +386,14 @@ function showBookingSummary() {
         day: 'numeric' 
     });
     
-    // Formatear hora
-    let [hora, minuto] = horaCita.split(':');
-    hora = parseInt(hora);
+    const [horaNum, minuto, segundo] = horaCita.split(':');
+    let hora = parseInt(horaNum);
     const periodo = hora >= 12 ? 'PM' : 'AM';
-    hora = hora % 12 || 12;
+    if (hora > 12) {
+        hora = hora - 12;
+    } else if (hora === 0) {
+        hora = 12;
+    }
     const horaFormateada = `${hora}:${minuto} ${periodo}`;
     
     const summaryHTML = `
@@ -388,7 +413,7 @@ function showBookingSummary() {
             <div class="col-12">
                 <div class="d-flex justify-content-between">
                     <strong>Duración:</strong>
-                    <span>${servicioDuracion}</span>
+                    <span>${servicioDuracion} min</span>
                 </div>
             </div>
             <div class="col-12">
@@ -417,16 +442,60 @@ function showBookingSummary() {
 
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('especialista_id').addEventListener('change', loadAvailableSlots);
-    document.getElementById('fecha_cita').addEventListener('change', loadAvailableSlots);
+    document.getElementById('especialista_id').addEventListener('change', function() {
+        document.getElementById('hora_cita').value = '';
+        loadAvailableSlots();
+    });
+    
+    document.getElementById('fecha_cita').addEventListener('change', function() {
+        document.getElementById('hora_cita').value = '';
+        loadAvailableSlots();
+    });
+    
+    document.querySelectorAll('input[name="servicio_id"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const especialistaId = document.getElementById('especialista_id').value;
+            const fechaCita = document.getElementById('fecha_cita').value;
+            if (especialistaId && fechaCita) {
+                document.getElementById('hora_cita').value = '';
+                loadAvailableSlots();
+            }
+        });
+    });
     
     // Validar formulario antes de enviar
     document.getElementById('bookingForm').addEventListener('submit', function(e) {
-        if (!validateStep1() || !validateStep2()) {
+        const servicioRadio = document.querySelector('input[name="servicio_id"]:checked');
+        const especialistaId = document.getElementById('especialista_id').value;
+        const fechaCita = document.getElementById('fecha_cita').value;
+        const horaCita = document.getElementById('hora_cita').value;
+        
+        if (!servicioRadio) {
             e.preventDefault();
-            alert('Por favor completa todos los campos requeridos');
+            alert('Por favor selecciona un servicio');
             return false;
         }
+        
+        if (!especialistaId) {
+            e.preventDefault();
+            alert('Por favor selecciona un especialista');
+            return false;
+        }
+        
+        if (!fechaCita) {
+            e.preventDefault();
+            alert('Por favor selecciona una fecha');
+            return false;
+        }
+        
+        if (!horaCita) {
+            e.preventDefault();
+            alert('Por favor selecciona un horario');
+            return false;
+        }
+        
+        console.log('Formulario válido, enviando...');
+        return true;
     });
 
     // Si hay servicio pre-seleccionado, hacer scroll
@@ -444,8 +513,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <?php if ($preselectedSpecialist): ?>
     const especialistaSelect = document.getElementById('especialista_id');
     if (especialistaSelect.value) {
-        const event = new Event('change');
-        especialistaSelect.dispatchEvent(event);
+        loadAvailableSlots();
     }
     <?php endif; ?>
 });

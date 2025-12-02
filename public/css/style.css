@@ -484,7 +484,6 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Estilos para el sistema de calificación por estrellas */ 
 .star-rating {
     display: flex;
     flex-direction: row-reverse;
@@ -515,7 +514,6 @@ body {
     transition: transform 0.2s ease;
 }
 
-/* Animación de cards */
 .card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -525,7 +523,6 @@ body {
     box-shadow: 0 8px 16px rgba(0,0,0,0.1);
 }
 
-/* Badges personalizados */
 .badge {
     padding: 0.5rem 0.75rem;
     font-weight: 600;
