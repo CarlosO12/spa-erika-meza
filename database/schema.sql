@@ -160,10 +160,29 @@ CREATE TABLE disponibilidad_especialistas (
 -- ============================================
 CREATE TABLE configuracion_sistema (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    llave_ajuste VARCHAR(100) NOT NULL UNIQUE,
-    valor_ajuste TEXT,
+    clave VARCHAR(100) NOT NULL UNIQUE,
+    valor TEXT,
+    tipo enum('text', 'email', 'phone', 'number', 'textarea', 'boolean') DEFAULT 'text', 
+    categoria VARCHAR(50) DEFAULT 'general',
     descripcion VARCHAR(255),
-    actualizado TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    actualizado TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_clave (clave),
+    INDEX idx_categoria (categoria)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- ============================================
+-- TABLA: contacto_mensajes
+-- Descripción: Mensajes del sistema
+-- ============================================
+CREATE TABLE contacto_mensajes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    telefono VARCHAR(20),
+    asunto enum('informacion', 'cita', 'servicio', 'queja', 'otro') NOT NULL, 
+    mensaje TEXT NOT NULL,
+    fecha_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    estado  ENUM('nuevo', 'leido', 'respondido') DEFAULT 'nuevo'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
